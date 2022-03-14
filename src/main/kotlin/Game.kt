@@ -1,6 +1,3 @@
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,7 +16,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
@@ -40,9 +36,9 @@ fun BotonExit(onClick: () -> Unit) {
 }
 
 @Composable
-fun BotonAttack(onClick: () -> Unit){
-    Button(onClick = onClick){
-        Text("Atacar")
+fun BotonText(text:String, onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text(text)
     }
 }
 
@@ -81,27 +77,33 @@ fun main() = application {
                 }
             }
         } else {
-            var attack by remember{mutableStateOf(false)}
+            var attack by remember { mutableStateOf(false) }
+            var defender by remember { mutableStateOf(false) }
             Surface(color = Color.Black, modifier = Modifier
                 .fillMaxSize()
                 .onKeyEvent {
-                    if (it.key == Key.A) {
-                        attack = true; true
-                    } else false
+                    when(it.key){
+                        Key.A -> {attack = true;print("Hola");true}
+                        Key.D -> {defender = true;true}
+                        else -> false
+                    }
                 }) {
                 Image(painterResource("bosque.png"), "Fondo bosque")
-                Column(horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Bottom, ) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Bottom,
+                ) {
                     Image(painterResource("singlesprite.png"), "Trainer", modifier = Modifier.width(Dp(300F)))
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom){
-                    BotonAttack { attack = true }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
+                    Row{BotonText("Atacar") { attack = true }}
+                    Row{BotonText("Defender"){defender = true} }
                 }
-                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Top){
-                    if(!attack){
-                    Image(painterResource("edu.png"),"Edu")}
-                    else Image(painterResource("img.png"),"Explosion")
-                 }
+                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Top) {
+                    if (!attack) {
+                        Image(painterResource("edu.png"), "Edu")
+                    } else Image(painterResource("img.png"), "Explosion")
+                }
             }
         }
     }
