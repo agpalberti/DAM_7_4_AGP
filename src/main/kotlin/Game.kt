@@ -81,22 +81,26 @@ fun main() = application {
                 }
             }
         } else {
-            Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
+            var attack by remember{mutableStateOf(false)}
+            Surface(color = Color.Black, modifier = Modifier
+                .fillMaxSize()
+                .onKeyEvent {
+                    if (it.key == Key.A) {
+                        attack = true; true
+                    } else false
+                }) {
                 Image(painterResource("bosque.png"), "Fondo bosque")
                 Column(horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier.onKeyEvent {
-                            if (it.key == Key.A) {
-                                TODO(); true
-                            } else false
-                        }) {
+                    verticalArrangement = Arrangement.Bottom, ) {
                     Image(painterResource("singlesprite.png"), "Trainer", modifier = Modifier.width(Dp(300F)))
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom){
-                    BotonAttack {  }
+                    BotonAttack { attack = true }
                 }
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Top){
-                    Image(painterResource("edu.png"),"Edu")
+                    if(!attack){
+                    Image(painterResource("edu.png"),"Edu")}
+                    else Image(painterResource("img.png"),"Explosion")
                  }
             }
         }
